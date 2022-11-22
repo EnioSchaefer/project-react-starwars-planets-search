@@ -1,10 +1,24 @@
-import { useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
+import { useContext, useEffect, useState } from 'react';
+import { FiltersContext } from '../context/FiltersContext';
+import { PlanetsContext } from '../context/PlanetsContext';
 
 export default function PlanetsTable() {
-  const { planets } = useContext(AuthContext);
+  const { planets } = useContext(PlanetsContext);
+  const { nameFilter, isInputEmpty } = useContext(FiltersContext);
+
+  const [filteredByName, setFilteredByName] = useState([]);
+
+  useEffect(() => {
+    if (!isInputEmpty) {
+      const filteredPlanets = planets
+        .filter((planet) => planet.name.includes(nameFilter));
+      setFilteredByName(filteredPlanets);
+    }
+  }, [nameFilter, isInputEmpty, planets]);
 
   if (planets.length === 0) return <p>Loading Planets...</p>;
+
+  const mapPlanets = isInputEmpty ? planets : filteredByName;
 
   return (
     <div>
@@ -15,7 +29,7 @@ export default function PlanetsTable() {
           </tr>
         </thead>
         <tbody>
-          {planets.map((planet) => (
+          {mapPlanets.map((planet) => (
             <tr key={ planet.name }>
               {Object.values(planet).map((value, i) => <td key={ i }>{value}</td>)}
             </tr>

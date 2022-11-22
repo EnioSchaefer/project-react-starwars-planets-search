@@ -1,9 +1,9 @@
 import { createContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-export const AuthContext = createContext();
+export const PlanetsContext = createContext();
 
-function AuthProvider({ children }) {
+function PlanetsProvider({ children }) {
   const [planets, setPlanets] = useState([]);
   // const [isLoading, setisLoading] = useState(false);
 
@@ -19,6 +19,7 @@ function AuthProvider({ children }) {
       console.log(data);
       setPlanets(data);
     } catch (e) {
+      console.log(e);
       throw new Error(e);
     }
   };
@@ -26,14 +27,14 @@ function AuthProvider({ children }) {
   useEffect(() => { fetchPlanets(); }, []);
 
   return (
-    <AuthContext.Provider value={ { planets } }>
+    <PlanetsContext.Provider value={ { planets } }>
       {children}
-    </AuthContext.Provider>
+    </PlanetsContext.Provider>
   );
 }
 
-AuthProvider.propTypes = {
-  children: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+PlanetsProvider.propTypes = {
+  children: PropTypes.element.isRequired,
 };
 
-export default AuthProvider;
+export default PlanetsProvider;
