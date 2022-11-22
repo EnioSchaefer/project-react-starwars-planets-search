@@ -1,12 +1,14 @@
 import React from 'react';
 import './App.css';
-import AuthContext from './context/AuthContext';
+import { AuthProvider } from './context/AuthContext';
+import PlanetsTable from './components/PlanetsTable';
 
 function App() {
   return (
-    <AuthContext.Provider value={ {} }>
+    <AuthProvider>
       <span>Hello, App!</span>
-    </AuthContext.Provider>
+      <PlanetsTable />
+    </AuthProvider>
   );
 }
 

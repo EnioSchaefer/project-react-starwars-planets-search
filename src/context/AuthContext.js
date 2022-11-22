@@ -1,5 +1,16 @@
 import { createContext } from 'react';
+import PropTypes from 'prop-types';
 
-const AuthContext = createContext();
+export const AuthContext = createContext();
 
-export default AuthContext;
+export function AuthProvider({ children }) {
+  return (
+    <AuthContext.Provider value={ { planets: [] } }>
+      {children}
+    </AuthContext.Provider>
+  );
+}
+
+AuthProvider.propTypes = {
+  children: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+};
