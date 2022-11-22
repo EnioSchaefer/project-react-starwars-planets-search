@@ -1,17 +1,11 @@
-import { useState, useEffect } from 'react';
-import fetchPlanets from '../services/fetchPlanets';
+import { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 
 export default function PlanetsTable() {
-  const [planets, setPlanets] = useState([]);
+  const { planets } = useContext(AuthContext);
 
-  useEffect(() => {
-    async function getPlanets() {
-      const planetsList = await fetchPlanets();
-      setPlanets(planetsList);
-    }
-    getPlanets();
-  }, []);
-  if (planets.length === 0) return <p>Loading...</p>;
+  if (planets.length === 0) return <p>Loading Planets...</p>;
+
   return (
     <div>
       <table>

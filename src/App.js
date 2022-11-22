@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { AuthProvider } from './context/AuthContext';
+import AuthProvider from './context/AuthContext';
 import PlanetsTable from './components/PlanetsTable';
 
 function App() {
