@@ -15,7 +15,6 @@ function PlanetsProvider({ children }) {
         delete planet.residents;
         return planet;
       });
-      console.log(data);
       setPlanets(data);
     } catch (e) {
       console.log(e);

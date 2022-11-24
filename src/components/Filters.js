@@ -4,7 +4,7 @@ import { FiltersContext } from '../context/FiltersContext';
 function Filters() {
   const { nameFilter, setNameFilter,
     setComplexFilter, setIsFiltered, allFilters,
-    setAllFilters } = useContext(FiltersContext);
+    setAllFilters, filterOptions, setFilterOptions } = useContext(FiltersContext);
   const [columnFilter, setColumnFilter] = useState('population');
   const [comparisonFilter, setComparisonFilter] = useState('maior que');
   const [valueFilter, setValueFilter] = useState(0);
@@ -14,6 +14,12 @@ function Filters() {
     setAllFilters([...allFilters, newFilter]);
     setComplexFilter(newFilter);
     setIsFiltered(true);
+
+    const newFilterOptions = filterOptions.map((filter) => {
+      if (filter.option === columnFilter) filter.available = false;
+      return filter;
+    });
+    setFilterOptions(newFilterOptions);
   };
 
   return (
@@ -32,11 +38,13 @@ function Filters() {
             id="column-filter"
             onChange={ ({ target }) => setColumnFilter(target.value) }
           >
-            <option value="population">population</option>
-            <option value="orbital_period">orbital_period</option>
-            <option value="diameter">diameter</option>
-            <option value="rotation_period">rotation_period</option>
-            <option value="surface_water">surface_water</option>
+            {filterOptions.map((filtOpt) => filtOpt.available && (
+              <option
+                value={ filtOpt.option }
+                key={ filtOpt.option }
+              >
+                {filtOpt.option}
+              </option>))}
           </select>
         </label>
         <label htmlFor="comparison-filter">

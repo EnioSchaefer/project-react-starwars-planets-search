@@ -40,7 +40,7 @@ export default function PlanetsTable() {
       }
     }
   }, [nameFilter, isInputEmpty, planets, complexFilter,
-    isFiltered, filteredByName, filteredComplex]);
+    isFiltered, filteredByName]);
 
   const mapPlanets = isFiltered ? filteredComplex : filteredByName;
 
