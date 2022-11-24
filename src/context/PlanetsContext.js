@@ -5,7 +5,6 @@ export const PlanetsContext = createContext();
 
 function PlanetsProvider({ children }) {
   const [planets, setPlanets] = useState([]);
-  // const [isLoading, setisLoading] = useState(false);
 
   const fetchPlanets = async () => {
     try {

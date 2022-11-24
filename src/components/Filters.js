@@ -3,13 +3,16 @@ import { FiltersContext } from '../context/FiltersContext';
 
 function Filters() {
   const { nameFilter, setNameFilter,
-    setComplexFilter, setIsFiltered } = useContext(FiltersContext);
+    setComplexFilter, setIsFiltered, allFilters,
+    setAllFilters } = useContext(FiltersContext);
   const [columnFilter, setColumnFilter] = useState('population');
   const [comparisonFilter, setComparisonFilter] = useState('maior que');
   const [valueFilter, setValueFilter] = useState(0);
 
   const filterByNumber = () => {
-    setComplexFilter({ columnFilter, comparisonFilter, valueFilter });
+    const newFilter = { columnFilter, comparisonFilter, valueFilter };
+    setAllFilters([...allFilters, newFilter]);
+    setComplexFilter(newFilter);
     setIsFiltered(true);
   };
 
@@ -61,6 +64,18 @@ function Filters() {
           Filtrar
         </button>
       </form>
+      <div>
+        {allFilters.map((filter, i) => (
+          <div key={ i }>
+            <span>
+              { `${filter.columnFilter} 
+              ${filter.comparisonFilter} 
+              ${filter.valueFilter}` }
+            </span>
+            <button type="button">Remover</button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

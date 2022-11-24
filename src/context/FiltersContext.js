@@ -8,6 +8,7 @@ function FiltersProvider({ children }) {
   const [isInputEmpty, setisInputEmpty] = useState(true);
   const [complexFilter, setComplexFilter] = useState({});
   const [isFiltered, setIsFiltered] = useState(false);
+  const [allFilters, setAllFilters] = useState([]);
 
   useEffect(() => {
     if (nameFilter.length > 0) { setisInputEmpty(false); }
@@ -23,6 +24,8 @@ function FiltersProvider({ children }) {
         setComplexFilter,
         isFiltered,
         setIsFiltered,
+        allFilters,
+        setAllFilters,
       } }
     >
       { children }
