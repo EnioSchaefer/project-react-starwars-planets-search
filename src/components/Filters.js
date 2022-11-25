@@ -2,24 +2,34 @@ import { useContext, useState } from 'react';
 import { FiltersContext } from '../context/FiltersContext';
 
 function Filters() {
-  const { nameFilter, setNameFilter,
-    setComplexFilter, setIsFiltered, allFilters,
-    setAllFilters, filterOptions, setFilterOptions } = useContext(FiltersContext);
-  const [columnFilter, setColumnFilter] = useState('population');
+  const { nameFilter, setNameFilter, numericFilters,
+    setNumericFilters, filterOptions, setFilterOptions } = useContext(FiltersContext);
+
+  const availableFilters = () => filterOptions
+    .filter((filter) => (filter.available));
+  console.log(availableFilters());
+
+  const [columnFilter, setColumnFilter] = useState(availableFilters()[0].option);
   const [comparisonFilter, setComparisonFilter] = useState('maior que');
   const [valueFilter, setValueFilter] = useState(0);
+  const [filterID, setFilterID] = useState(0);
 
   const filterByNumber = () => {
-    const newFilter = { columnFilter, comparisonFilter, valueFilter };
-    setAllFilters([...allFilters, newFilter]);
-    setComplexFilter(newFilter);
-    setIsFiltered(true);
+    const newFilter = {
+      columnFilter,
+      comparisonFilter,
+      valueFilter,
+      id: filterID };
+    console.log(newFilter);
+    setFilterID(filterID + 1);
+    setNumericFilters([...numericFilters, newFilter]);
 
     const newFilterOptions = filterOptions.map((filter) => {
       if (filter.option === columnFilter) filter.available = false;
       return filter;
     });
     setFilterOptions(newFilterOptions);
+    setColumnFilter(availableFilters()[0].option);
   };
 
   return (
@@ -73,7 +83,7 @@ function Filters() {
         </button>
       </form>
       <div>
-        {allFilters.map((filter, i) => (
+        {numericFilters.map((filter, i) => (
           <div key={ i }>
             <span>
               { `${filter.columnFilter} 

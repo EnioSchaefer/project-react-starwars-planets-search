@@ -25,7 +25,7 @@ function PlanetsProvider({ children }) {
   useEffect(() => { fetchPlanets(); }, []);
 
   return (
-    <PlanetsContext.Provider value={ { planets } }>
+    <PlanetsContext.Provider value={ { planets, setPlanets } }>
       {children}
     </PlanetsContext.Provider>
   );

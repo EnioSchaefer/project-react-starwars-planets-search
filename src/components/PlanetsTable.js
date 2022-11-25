@@ -4,45 +4,32 @@ import { PlanetsContext } from '../context/PlanetsContext';
 
 export default function PlanetsTable() {
   const { planets } = useContext(PlanetsContext);
-  const { nameFilter, isInputEmpty,
-    complexFilter, isFiltered } = useContext(FiltersContext);
+  const { filteredPlanets, numericFilters } = useContext(FiltersContext);
 
-  const [filteredByName, setFilteredByName] = useState([]);
-  const [filteredComplex, setFilteredComplex] = useState([]);
+  const [filteredNumeric, setFilteredNumeric] = useState(null);
 
   useEffect(() => {
-    if (isInputEmpty) {
-      setFilteredByName(planets);
-    } else {
-      setFilteredByName(planets.filter((planet) => planet.name.includes(nameFilter)));
-    }
-
-    if (isFiltered) {
-      const { columnFilter, comparisonFilter, valueFilter } = complexFilter;
-      const mapPlanets = Object.keys(filteredComplex).length > 0
-        ? filteredComplex : filteredByName;
-
-      switch (comparisonFilter) {
+    const filtering = filteredNumeric || filteredPlanets;
+    numericFilters.forEach((filter) => {
+      switch (filter.comparisonFilter) {
       case 'maior que':
-        setFilteredComplex(mapPlanets
-          .filter((planet) => planet[columnFilter] > Number(valueFilter)));
+        setFilteredNumeric(filtering
+          .filter((planet) => Number(planet[filter.columnFilter]) > filter.valueFilter));
         break;
       case 'menor que':
-        setFilteredComplex(mapPlanets
-          .filter((planet) => planet[columnFilter] < Number(valueFilter)));
+        setFilteredNumeric(filtering
+          .filter((planet) => Number(planet[filter.columnFilter]) < filter.valueFilter));
         break;
       case 'igual a':
-        setFilteredComplex(mapPlanets
-          .filter((planet) => planet[columnFilter] === valueFilter));
+        setFilteredNumeric(filtering
+          .filter((planet) => planet[filter.columnFilter]
+          === filter.valueFilter));
         break;
       default:
-        setFilteredComplex('lint obligates me to put this useless default');
+        return 'nothing yet';
       }
-    }
-  }, [nameFilter, isInputEmpty, planets, complexFilter,
-    isFiltered, filteredByName]);
-
-  const mapPlanets = isFiltered ? filteredComplex : filteredByName;
+    });
+  }, [numericFilters, filteredPlanets]);
 
   if (planets.length === 0) return <p>Loading Planets...</p>;
 
@@ -55,7 +42,7 @@ export default function PlanetsTable() {
           </tr>
         </thead>
         <tbody>
-          {mapPlanets.map((planet) => (
+          {(filteredNumeric || filteredPlanets).map((planet) => (
             <tr key={ planet.name }>
               {Object.values(planet).map((value, i) => <td key={ i }>{value}</td>)}
             </tr>

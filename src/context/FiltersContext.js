@@ -1,14 +1,15 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { PlanetsContext } from './PlanetsContext';
 
 export const FiltersContext = createContext();
 
 function FiltersProvider({ children }) {
+  const { planets } = useContext(PlanetsContext);
+
   const [nameFilter, setNameFilter] = useState('');
-  const [isInputEmpty, setisInputEmpty] = useState(true);
-  const [complexFilter, setComplexFilter] = useState({});
-  const [isFiltered, setIsFiltered] = useState(false);
-  const [allFilters, setAllFilters] = useState([]);
+  const [numericFilters, setNumericFilters] = useState([]);
+  const [filteredPlanets, setFilteredPlanets] = useState([]);
   const [filterOptions, setFilterOptions] = useState([
     { option: 'population', available: true },
     { option: 'orbital_period', available: true },
@@ -18,21 +19,21 @@ function FiltersProvider({ children }) {
   ]);
 
   useEffect(() => {
-    if (nameFilter.length > 0) { setisInputEmpty(false); }
-  }, [nameFilter]);
+    if (nameFilter.length > 0) {
+      setFilteredPlanets(planets.filter((planet) => planet.name.includes(nameFilter)));
+    } else if (nameFilter.length === 0) {
+      setFilteredPlanets(planets);
+    }
+  }, [nameFilter, planets]);
 
   return (
     <FiltersContext.Provider
       value={ {
         nameFilter,
         setNameFilter,
-        isInputEmpty,
-        complexFilter,
-        setComplexFilter,
-        isFiltered,
-        setIsFiltered,
-        allFilters,
-        setAllFilters,
+        filteredPlanets,
+        numericFilters,
+        setNumericFilters,
         filterOptions,
         setFilterOptions,
       } }
