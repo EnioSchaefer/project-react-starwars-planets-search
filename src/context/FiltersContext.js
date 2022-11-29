@@ -7,6 +7,7 @@ export const FiltersContext = createContext();
 function FiltersProvider({ children }) {
   const { planets } = useContext(PlanetsContext);
 
+  const [deletingFilter, setDeletingFilter] = useState(false);
   const [nameFilter, setNameFilter] = useState('');
   const [numericFilters, setNumericFilters] = useState([]);
   const [filteredPlanets, setFilteredPlanets] = useState([]);
@@ -36,6 +37,8 @@ function FiltersProvider({ children }) {
         setNumericFilters,
         filterOptions,
         setFilterOptions,
+        deletingFilter,
+        setDeletingFilter,
       } }
     >
       { children }

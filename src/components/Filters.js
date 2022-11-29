@@ -3,11 +3,11 @@ import { FiltersContext } from '../context/FiltersContext';
 
 function Filters() {
   const { nameFilter, setNameFilter, numericFilters,
-    setNumericFilters, filterOptions, setFilterOptions } = useContext(FiltersContext);
+    setNumericFilters, filterOptions, setFilterOptions,
+    setDeletingFilter } = useContext(FiltersContext);
 
   const availableFilters = () => filterOptions
     .filter((filter) => (filter.available));
-  console.log(availableFilters());
 
   const [columnFilter, setColumnFilter] = useState(availableFilters()[0].option);
   const [comparisonFilter, setComparisonFilter] = useState('maior que');
@@ -20,7 +20,6 @@ function Filters() {
       comparisonFilter,
       valueFilter,
       id: filterID };
-    console.log(newFilter);
     setFilterID(filterID + 1);
     setNumericFilters([...numericFilters, newFilter]);
 
@@ -32,6 +31,12 @@ function Filters() {
     setColumnFilter(availableFilters()[0].option);
   };
 
+  const removeFilter = (filterToDelete) => {
+    setDeletingFilter(true);
+    setNumericFilters(numericFilters
+      .filter((filter) => filter.columnFilter !== filterToDelete));
+  };
+
   return (
     <div>
       <input
@@ -41,7 +46,7 @@ function Filters() {
         data-testid="name-filter"
         onChange={ ({ target }) => setNameFilter(target.value) }
       />
-      <form>
+      <div>
         <label htmlFor="column-filter">
           <select
             data-testid="column-filter"
@@ -81,18 +86,34 @@ function Filters() {
         >
           Filtrar
         </button>
-      </form>
+      </div>
       <div>
         {numericFilters.map((filter, i) => (
-          <div key={ i }>
+          <div key={ i } data-testid="filter">
             <span>
               { `${filter.columnFilter} 
               ${filter.comparisonFilter} 
               ${filter.valueFilter}` }
             </span>
-            <button type="button">Remover</button>
+            <button
+              type="button"
+              onClick={ () => removeFilter(filter.columnFilter) }
+            >
+              Remover
+            </button>
           </div>
         ))}
+        {numericFilters.length > 0 && (
+          <button
+            type="button"
+            data-testid="button-remove-filters"
+            onClick={ () => {
+              setNumericFilters([]);
+              setDeletingFilter(true);
+            } }
+          >
+            Remover Filtros
+          </button>)}
       </div>
     </div>
   );

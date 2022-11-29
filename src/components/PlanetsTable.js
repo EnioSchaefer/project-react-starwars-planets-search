@@ -4,26 +4,37 @@ import { PlanetsContext } from '../context/PlanetsContext';
 
 export default function PlanetsTable() {
   const { planets } = useContext(PlanetsContext);
-  const { filteredPlanets, numericFilters } = useContext(FiltersContext);
+  const { filteredPlanets, numericFilters,
+    deletingFilter, setDeletingFilter } = useContext(FiltersContext);
 
   const [filteredNumeric, setFilteredNumeric] = useState(null);
+  const [filtering, setFiltering] = useState(null);
 
   useEffect(() => {
-    const filtering = filteredNumeric || filteredPlanets;
+    if (!deletingFilter) {
+      setFiltering(filteredNumeric || filteredPlanets);
+    } else {
+      setFiltering(filteredPlanets);
+      setFilteredNumeric(null);
+    }
+    console.log('currently filtering');
     numericFilters.forEach((filter) => {
       switch (filter.comparisonFilter) {
       case 'maior que':
         setFilteredNumeric(filtering
           .filter((planet) => Number(planet[filter.columnFilter]) > filter.valueFilter));
+        setDeletingFilter(false);
         break;
       case 'menor que':
         setFilteredNumeric(filtering
           .filter((planet) => Number(planet[filter.columnFilter]) < filter.valueFilter));
+        setDeletingFilter(false);
         break;
       case 'igual a':
         setFilteredNumeric(filtering
           .filter((planet) => planet[filter.columnFilter]
           === filter.valueFilter));
+        setDeletingFilter(false);
         break;
       default:
         return 'nothing yet';
