@@ -11,6 +11,7 @@ function FiltersProvider({ children }) {
   const [nameFilter, setNameFilter] = useState('');
   const [numericFilters, setNumericFilters] = useState([]);
   const [filteredPlanets, setFilteredPlanets] = useState([]);
+  const [orderPlanets, setOrderPlanets] = useState(null);
   const [filterOptions, setFilterOptions] = useState([
     { option: 'population', available: true },
     { option: 'orbital_period', available: true },
@@ -39,6 +40,8 @@ function FiltersProvider({ children }) {
         setFilterOptions,
         deletingFilter,
         setDeletingFilter,
+        orderPlanets,
+        setOrderPlanets,
       } }
     >
       { children }
