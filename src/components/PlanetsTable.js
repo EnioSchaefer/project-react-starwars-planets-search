@@ -60,7 +60,8 @@ export default function PlanetsTable() {
       const sortedPlanets = [...definedPlanets, ...unknownPlanets];
       setFilteredNumeric(sortedPlanets);
     }
-  }, [numericFilters, filteredPlanets, orderPlanets]);
+  }, [numericFilters, filteredPlanets, setDeletingFilter,
+    orderPlanets, deletingFilter, filteredNumeric, filtering]);
 
   if (planets.length === 0) return <p>Loading Planets...</p>;
 
